@@ -8,20 +8,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model credentials {
-  id       Int    @id @default(autoincrement())
-  user_id  Int
-  title    String @db.VarChar(255)
-  url      String @db.VarChar(255)
-  username String @db.VarChar(255)
-  password String @db.VarChar(255)
-  users    users  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "credentials_user_id_foreign")
+model User{
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+  password String
+  credentials Credential[]
+
+  @@map("users")
 }
 
-model users {
-  id          Int           @id @default(autoincrement())
-  name        String        @db.VarChar(255)
-  email       String        @unique(map: "users_email_unique") @db.VarChar(255)
-  password    String        @db.VarChar(255)
-  credentials credentials[]
+model Credential{
+  id Int @id @default(autoincrement())
+  user_id Int
+  user User @relation(fields: [user_id], references: [id]) 
+  title String
+  url String
+  username String
+  password String
+
+  @@map("credentials")
 }
+
+
+// model users {
+//   id          Int           @id @default(autoincrement())
+//   name        String        @db.VarChar(255)
+//   email       String        @unique(map: "users_email_unique") @db.VarChar(255)
+//   password    String        @db.VarChar(255)
+//   credentials credentials[]
+// }
+// model credentials {
+//   id       Int    @id @default(autoincrement())
+//   user_id  Int
+//   title    String @db.VarChar(255)
+//   url      String @db.VarChar(255)
+//   username String @db.VarChar(255)
+//   password String @db.VarChar(255)
+//   users    users  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "credentials_user_id_foreign")
+// }
+

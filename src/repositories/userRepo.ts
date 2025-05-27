@@ -1,8 +1,8 @@
-import { InsertUser, User } from "../protocols/protocols";
+import { InsertUser } from "../protocols/protocols";
 import prisma from "../database/database";
 
 export async function findEmail(email: string){
-    const result = await prisma.users.findUnique({
+    const result = await prisma.user.findUnique({
         where:{email}
     })
     return result;
@@ -10,7 +10,7 @@ export async function findEmail(email: string){
 
 export async function signUpRepo(userData: InsertUser){
     const {name, email, password} = userData;
-    const newUser = await prisma.users.create({
+    const newUser = await prisma.user.create({
         data:{
             name,
             email,
