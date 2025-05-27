@@ -2,3 +2,4 @@
 .env
 /dist
 /sql
+/src/generated/prisma
