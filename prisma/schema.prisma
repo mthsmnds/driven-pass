@@ -14,6 +14,7 @@ model User{
   email String @unique
   password String
   credentials Credential[]
+  sessions Session[]
 
   @@map("users")
 }
@@ -30,21 +31,13 @@ model Credential{
   @@map("credentials")
 }
 
+model Session {
+  id Int @id @default(autoincrement())
+  token String @unique
+  user_id Int
+  user User @relation(fields: [user_id], references: [id]) 
+  createdAt DateTime @default(now())
 
-// model users {
-//   id          Int           @id @default(autoincrement())
-//   name        String        @db.VarChar(255)
-//   email       String        @unique(map: "users_email_unique") @db.VarChar(255)
-//   password    String        @db.VarChar(255)
-//   credentials credentials[]
-// }
-// model credentials {
-//   id       Int    @id @default(autoincrement())
-//   user_id  Int
-//   title    String @db.VarChar(255)
-//   url      String @db.VarChar(255)
-//   username String @db.VarChar(255)
-//   password String @db.VarChar(255)
-//   users    users  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "credentials_user_id_foreign")
-// }
+  @@map("sessions")  
+}
 

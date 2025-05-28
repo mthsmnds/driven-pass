@@ -19,5 +19,10 @@ export function errorHandler(error: any, req: Request, res: Response, next: Next
         return;
     }
 
+    if (error.type === "unauthorized"){
+        res.status(httpStatus.UNAUTHORIZED).send(error.message);
+        return
+    }
+
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send("Internal Server Error");
 }

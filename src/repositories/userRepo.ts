@@ -1,4 +1,3 @@
-import { InsertUser } from "../protocols/protocols";
 import prisma from "../database/database";
 
 export async function findEmail(email: string){
@@ -8,7 +7,7 @@ export async function findEmail(email: string){
     return result;
 }
 
-export async function signUpRepo(userData: InsertUser){
+export async function signUpRepo(userData: {name:string, email:string, password:string}){
     const {name, email, password} = userData;
     const newUser = await prisma.user.create({
         data:{
@@ -18,4 +17,13 @@ export async function signUpRepo(userData: InsertUser){
         }
     });
     return newUser;
+}
+
+export async function createSession(userId:number, token: string){
+    return prisma.session.create({
+        data:{
+            user_id: userId,
+            token
+        }
+    });
 }

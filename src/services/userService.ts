@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
-import { InsertUser } from "../protocols/protocols";
-import { findEmail, signUpRepo } from "../repositories/userRepo";
+import jwt from "jsonwebtoken";
+import { createSession, findEmail, signUpRepo } from "../repositories/userRepo";
 
 
-export async function signUpService(userData: InsertUser){
+export async function signUpService(userData: {name:string, email:string, password:string}){
     const existingEmail = await findEmail(userData.email);
     if(existingEmail){
         throw{
@@ -13,10 +13,37 @@ export async function signUpService(userData: InsertUser){
     };
 
     const hashedPassword = bcrypt.hashSync(userData.password, 10);
-    const newUser: InsertUser ={
+    const newUser = {
         ...userData,
         password: hashedPassword
     };
 
     await signUpRepo(newUser);
+}
+
+export async function signInService(email:string, password:string){
+    const validUser = await findEmail(email);
+    if(!validUser){
+        throw{
+            type: "not_found",
+            message: "Email ou senha incorretos"
+        }
+    };
+
+    const validPassword = bcrypt.compareSync(password, validUser.password);
+    if(!validPassword){
+        throw{
+            type:"unauthorized",
+            message: "Email ou senha incorretos"
+        }
+    };
+
+    const token = jwt.sign(
+        {userId: validUser.id},
+        process.env.JWT_SECRET,
+        {expiresIn: 86400}
+    );
+
+    await createSession(validUser.id, token);
+    return token;
 }
