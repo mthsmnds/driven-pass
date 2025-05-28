@@ -28,8 +28,17 @@ export async function getCredentialIdRepo(userId: number, id:number){
     const result = await prisma.credential.findFirst({
         where:{
             user_id: userId,
-            id: id
+            id
         }
     });
     return result;
 }
+
+export async function updateCredentialRepo(userId:number, id:number, credData:{title:string, url:string, username:string, password:string}){
+    const result = await prisma.credential.update({
+        where:{ user_id: userId,id},
+        data: credData
+    });
+    return result;
+}
+
