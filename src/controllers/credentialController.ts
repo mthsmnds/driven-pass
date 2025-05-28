@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import httpStatus from "http-status";
-import { addCredentialService } from "../services/credentialService";
+import { addCredentialService, getCredentialIdService, getCredentialService } from "../services/credentialService";
 
 
 export async function addCredentialController(req: Request, res: Response){
@@ -8,5 +8,19 @@ export async function addCredentialController(req: Request, res: Response){
     const userId = res.locals.userId
 
     await addCredentialService(userId, credData);
-     res.status(httpStatus.CREATED).send("Credencial criada com sucesso!");
+        res.status(httpStatus.CREATED).send("Credencial criada com sucesso!");
+}
+
+export async function getCredentialController(req:Request, res: Response){
+    const userId = res.locals.userId;
+    const credentials = await getCredentialService(userId);
+        res.status(httpStatus.OK).send(credentials);
+}
+
+export async function getCredentialIdController(req: Request, res: Response){
+    const userId = res.locals.userId;
+    const id = parseInt(req.params.id);
+    const credentials = await getCredentialIdService(userId, id);
+    res.status(httpStatus.OK).send(credentials);
+
 }

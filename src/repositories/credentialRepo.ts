@@ -16,3 +16,20 @@ export async function addCredentialRepo(userId: number, credData:{title:string, 
     });
     return newCredential;
 }
+
+export async function getCredentialRepo(userId: number){
+    const result = await prisma.credential.findMany({
+        where:{user_id:userId}
+    });
+    return result;
+}
+
+export async function getCredentialIdRepo(userId: number, id:number){
+    const result = await prisma.credential.findFirst({
+        where:{
+            user_id: userId,
+            id: id
+        }
+    });
+    return result;
+}
