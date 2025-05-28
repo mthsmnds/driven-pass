@@ -3,13 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "prisma generate && tsc",
+    "build": "tsc",
     "start": "npm run migration:run && npm run seed && node dist/src/index.js",
     "dev": "ts-node-dev src/index.ts",
     "migration:run": "prisma migrate deploy",
-    "prisma:seed": "tsx dist/prisma/seed.ts",
-    "prisma:generate": "prisma generate",
-    "seed": "npm run prisma:seed"
+    "seed": "prisma db seed"
   },
   "keywords": [],
   "author": "Matheus Mendes Falcão",
