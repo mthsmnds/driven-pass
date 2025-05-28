@@ -1,4 +1,4 @@
-import { addCredentialRepo, findTitleMatchId, getCredentialIdRepo, getCredentialRepo, updateCredentialRepo } from "../repositories/credentialRepo";
+import { addCredentialRepo, deleteCredentialRepo, findTitleMatchId, getCredentialIdRepo, getCredentialRepo, updateCredentialRepo } from "../repositories/credentialRepo";
 import Cryptr from "cryptr";
 
 const cryptr = new Cryptr('cryptrSecretKey');
@@ -62,4 +62,16 @@ export async function updateCredentialService(userId: number, id:number, credDat
 
     const encryptedPassword = cryptr.encrypt(credData.password);
     await updateCredentialRepo(userId, id, {...credData, password: encryptedPassword});
+}
+
+export async function deleteCredentialService(userId:number, id:number){
+    const credentials = await getCredentialIdRepo(userId, id);
+      if(!credentials){
+        throw{
+            type: "not_found",
+            message: "Credencial não encontrada"
+        }
+    }
+
+    await deleteCredentialRepo(userId, id);
 }

@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import httpStatus from "http-status";
-import { addCredentialService, getCredentialIdService, getCredentialService, updateCredentialService } from "../services/credentialService";
+import { addCredentialService, deleteCredentialService, getCredentialIdService, getCredentialService, updateCredentialService } from "../services/credentialService";
 
 
 export async function addCredentialController(req: Request, res: Response){
@@ -27,10 +27,20 @@ export async function getCredentialIdController(req: Request, res: Response){
 
 
 export async function updateCredentialController(req: Request, res: Response){
-const userId = res.locals.userId;
+    const userId = res.locals.userId;
     const id = parseInt(req.params.id);
     const credData = req.body
-    const credentials = await updateCredentialService(userId, id, credData);
+
+    await updateCredentialService(userId, id, credData);
     res.sendStatus(httpStatus.NO_CONTENT);
+
+}
+
+export async function deleteCredentialController(req: Request, res: Response){
+    const userId = res.locals.userId;
+    const id = parseInt(req.params.id);
+
+    await deleteCredentialService(userId, id);
+    res.sendStatus(httpStatus.NO_CONTENT)
 
 }

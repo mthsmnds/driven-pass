@@ -42,3 +42,9 @@ export async function updateCredentialRepo(userId:number, id:number, credData:{t
     return result;
 }
 
+export async function deleteCredentialRepo(userId:number, id:number){
+    const result = await prisma.credential.delete({
+        where:{user_id:userId, id}
+    });
+    return result;
+}
