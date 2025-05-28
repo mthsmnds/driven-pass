@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { createSession, findEmail, signUpRepo } from "../repositories/userRepo";
+import { createSession, deleteUserRepo, findEmail, signUpRepo } from "../repositories/userRepo";
 
 
 export async function signUpService(userData: {name:string, email:string, password:string}){
@@ -46,4 +46,9 @@ export async function signInService(email:string, password:string){
 
     await createSession(validUser.id, token);
     return token;
+}
+
+export async function deleteUserService(userId: number){
+    const result = await deleteUserRepo(userId);
+    return result;
 }

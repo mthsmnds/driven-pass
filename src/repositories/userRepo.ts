@@ -17,10 +17,19 @@ export async function signUpRepo(userData: {name:string, email:string, password:
 }
 
 export async function createSession(userId:number, token: string){
-    return prisma.session.create({
+    const newSession = await prisma.session.create({
         data:{
             user_id: userId,
             token
         }
     });
+    return newSession;
+}
+
+export async function deleteUserRepo(userId: number){
+    const deletion = await prisma.$transaction([
+        prisma.credential.deleteMany({where:{user_id:userId}}),
+        prisma.user.delete({where:{id:userId}})
+    ]);
+    return deletion;
 }
