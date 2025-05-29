@@ -1,4 +1,6 @@
-import prisma from "../src/database/database"
+import { PrismaClient } from "../src/generated/prisma";
+const prisma = new PrismaClient();
+
 import bcrypt from "bcrypt"
 
 async function main(){
