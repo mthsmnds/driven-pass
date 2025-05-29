@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "npm run prisma:generate && npm run migration:run && npm run seed && node dist/src/index.js",
+    "start": "npm run migration:run && npm run prisma:generate && npm run seed && node dist/src/index.js",
     "dev": "ts-node-dev src/index.ts",
     "migration:run": "prisma migrate deploy",
     "seed": "prisma db seed",
