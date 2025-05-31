@@ -1,9 +1,10 @@
 import {Request, Response} from "express";
 import httpStatus from "http-status";
 import { addCredentialService, deleteCredentialService, getCredentialIdService, getCredentialService, updateCredentialService } from "../services/credentialService";
+import { Credential } from "@prisma/client";
 
 
-export async function addCredentialController(req: Request, res: Response){
+export async function addCredentialController(req: Request, res: Response):Promise <void>{
     const credData = req.body as {title:string, url:string, username:string, password:string} 
     const userId = res.locals.userId
 
@@ -11,13 +12,13 @@ export async function addCredentialController(req: Request, res: Response){
         res.status(httpStatus.CREATED).send("Credencial criada com sucesso!");
 }
 
-export async function getCredentialController(req:Request, res: Response){
+export async function getCredentialController(req:Request, res: Response):Promise <void>{
     const userId = res.locals.userId;
     const credentials = await getCredentialService(userId);
         res.status(httpStatus.OK).send(credentials);
 }
 
-export async function getCredentialIdController(req: Request, res: Response){
+export async function getCredentialIdController(req: Request, res: Response):Promise <void>{
     const userId = res.locals.userId;
     const id = parseInt(req.params.id);
     const credentials = await getCredentialIdService(userId, id);
@@ -26,7 +27,7 @@ export async function getCredentialIdController(req: Request, res: Response){
 }
 
 
-export async function updateCredentialController(req: Request, res: Response){
+export async function updateCredentialController(req: Request, res: Response):Promise <void>{
     const userId = res.locals.userId;
     const id = parseInt(req.params.id);
     const credData = req.body
@@ -36,7 +37,7 @@ export async function updateCredentialController(req: Request, res: Response){
 
 }
 
-export async function deleteCredentialController(req: Request, res: Response){
+export async function deleteCredentialController(req: Request, res: Response):Promise <void>{
     const userId = res.locals.userId;
     const id = parseInt(req.params.id);
 

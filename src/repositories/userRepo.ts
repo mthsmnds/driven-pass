@@ -1,13 +1,14 @@
+import { Session, User } from "@prisma/client";
 import prisma from "../database/database";
 
-export async function findEmail(email: string){
+export async function findEmail(email: string): Promise <User | null> {
     const result = await prisma.user.findUnique({
         where:{email}
     });
     return result;
 }
 
-export async function signUpRepo(userData: {name:string, email:string, password:string}){
+export async function signUpRepo(userData: {name:string, email:string, password:string}): Promise <User | null> {
     const newUser = await prisma.user.create({
         data:{
            ...userData
@@ -16,7 +17,7 @@ export async function signUpRepo(userData: {name:string, email:string, password:
     return newUser;
 }
 
-export async function createSession(userId:number, token: string){
+export async function createSession(userId:number, token: string): Promise <Session | null> {
     const newSession = await prisma.session.create({
         data:{
             user_id: userId,
@@ -26,10 +27,9 @@ export async function createSession(userId:number, token: string){
     return newSession;
 }
 
-export async function deleteUserRepo(userId: number){
-    const deletion = await prisma.$transaction([
+export async function deleteUserRepo(userId: number): Promise<void> {
+    await prisma.$transaction([
         prisma.credential.deleteMany({where:{user_id:userId}}),
         prisma.user.delete({where:{id:userId}})
     ]);
-    return deletion;
 }

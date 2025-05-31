@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import httpStatus from "http-status";
 import { deleteUserService, signInService, signUpService } from "../services/userService";
 
-export async function signUpController(req: Request, res: Response){
+export async function signUpController(req: Request, res: Response): Promise <void>{
     const userData = req.body as {name:string, email:string, password:string};
 
     await signUpService(userData);
@@ -10,7 +10,7 @@ export async function signUpController(req: Request, res: Response){
     res.status(httpStatus.CREATED).send("Usuário cadastrado com sucesso!");
 }
 
-export async function signInController(req:Request, res: Response){
+export async function signInController(req:Request, res: Response):Promise <void>{
     const {email, password} = req.body;
 
     const token = await signInService(email, password);
@@ -18,7 +18,7 @@ export async function signInController(req:Request, res: Response){
    res.status(httpStatus.OK).send({token});
 }
 
-export async function deleteUserController(req: Request, res: Response){
+export async function deleteUserController(req: Request, res: Response):Promise <void>{
     const userId = res.locals.userId;
     await deleteUserService(userId);
     res.sendStatus(httpStatus.NO_CONTENT);

@@ -1,9 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createSession, deleteUserRepo, findEmail, signUpRepo } from "../repositories/userRepo";
+import { User } from "@prisma/client";
 
 
-export async function signUpService(userData: {name:string, email:string, password:string}){
+export async function signUpService(userData: {name:string, email:string, password:string}): Promise <void> {
     const existingEmail = await findEmail(userData.email);
     if(existingEmail){
         throw{
@@ -21,7 +22,7 @@ export async function signUpService(userData: {name:string, email:string, passwo
     await signUpRepo(newUser);
 }
 
-export async function signInService(email:string, password:string){
+export async function signInService(email:string, password:string): Promise <string> {
     const validUser = await findEmail(email);
     if(!validUser){
         throw{
@@ -48,7 +49,7 @@ export async function signInService(email:string, password:string){
     return token;
 }
 
-export async function deleteUserService(userId: number){
+export async function deleteUserService(userId: number): Promise <void> {
     const result = await deleteUserRepo(userId);
     return result;
 }

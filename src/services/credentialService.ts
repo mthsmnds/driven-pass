@@ -1,9 +1,10 @@
+import { Credential } from "@prisma/client";
 import { addCredentialRepo, deleteCredentialRepo, findTitleMatchId, getCredentialIdRepo, getCredentialRepo, updateCredentialRepo } from "../repositories/credentialRepo";
 import Cryptr from "cryptr";
 
 const cryptr = new Cryptr('cryptrSecretKey');
 
-export async function addCredentialService(userId: number, credData:{title:string, url:string, username:string, password:string}){
+export async function addCredentialService(userId: number, credData:{title:string, url:string, username:string, password:string}): Promise <void> {
     const existingCredential = await findTitleMatchId(userId, credData.title);
     if(existingCredential){
         throw{
@@ -17,7 +18,7 @@ export async function addCredentialService(userId: number, credData:{title:strin
 
 }
 
-export async function getCredentialService(userId: number){
+export async function getCredentialService(userId: number): Promise <Credential[]>{
     const credentials = await getCredentialRepo(userId);
     const decrypted = credentials.map(cred =>({
         ...cred,
@@ -26,7 +27,7 @@ export async function getCredentialService(userId: number){
     return decrypted;
 }
 
-export async function getCredentialIdService(userId: number, id:number){
+export async function getCredentialIdService(userId: number, id:number): Promise <Credential>{
     const credentials = await getCredentialIdRepo(userId, id);
     if(!credentials){
         throw{
@@ -43,7 +44,7 @@ export async function getCredentialIdService(userId: number, id:number){
     return decrypted;
 }
 
-export async function updateCredentialService(userId: number, id:number, credData:{title:string, url:string, username:string, password:string}){
+export async function updateCredentialService(userId: number, id:number, credData:{title:string, url:string, username:string, password:string}): Promise <void>{
     const credentials = await getCredentialIdRepo(userId, id);
     if(!credentials){
         throw{
@@ -64,7 +65,7 @@ export async function updateCredentialService(userId: number, id:number, credDat
     await updateCredentialRepo(userId, id, {...credData, password: encryptedPassword});
 }
 
-export async function deleteCredentialService(userId:number, id:number){
+export async function deleteCredentialService(userId:number, id:number): Promise <void>{
     const credentials = await getCredentialIdRepo(userId, id);
       if(!credentials){
         throw{

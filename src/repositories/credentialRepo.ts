@@ -1,13 +1,14 @@
+import { Credential } from "@prisma/client";
 import prisma from "../database/database";
 
-export async function findTitleMatchId(userId:number, title:string){
+export async function findTitleMatchId(userId:number, title:string): Promise <Credential | null>{
     const result = await prisma.credential.findFirst({
         where: {user_id: userId, title}
     });
     return result;
 }
 
-export async function addCredentialRepo(userId: number, credData:{title:string, url:string, username:string, password:string}){
+export async function addCredentialRepo(userId: number, credData:{title:string, url:string, username:string, password:string}): Promise <Credential | null>{
     const newCredential = await prisma.credential.create({
         data:{
             ...credData,
@@ -17,14 +18,14 @@ export async function addCredentialRepo(userId: number, credData:{title:string, 
     return newCredential;
 }
 
-export async function getCredentialRepo(userId: number){
+export async function getCredentialRepo(userId: number): Promise <Credential[] | null>{
     const result = await prisma.credential.findMany({
         where:{user_id:userId}
     });
     return result;
 }
 
-export async function getCredentialIdRepo(userId: number, id:number){
+export async function getCredentialIdRepo(userId: number, id:number): Promise <Credential | null>{
     const result = await prisma.credential.findFirst({
         where:{
             user_id: userId,
@@ -34,7 +35,7 @@ export async function getCredentialIdRepo(userId: number, id:number){
     return result;
 }
 
-export async function updateCredentialRepo(userId:number, id:number, credData:{title:string, url:string, username:string, password:string}){
+export async function updateCredentialRepo(userId:number, id:number, credData:{title:string, url:string, username:string, password:string}): Promise <Credential | null>{
     const result = await prisma.credential.update({
         where:{ user_id: userId,id},
         data: credData
@@ -42,7 +43,7 @@ export async function updateCredentialRepo(userId:number, id:number, credData:{t
     return result;
 }
 
-export async function deleteCredentialRepo(userId:number, id:number){
+export async function deleteCredentialRepo(userId:number, id:number): Promise <Credential | null>{
     const result = await prisma.credential.delete({
         where:{user_id:userId, id}
     });
